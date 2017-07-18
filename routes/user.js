@@ -48,7 +48,7 @@ router.get('/report/:reportid', function(req, res, next) {
     UserReportModel.findById(req.params.reportid, function(err, userreport) {
         if (err || !userreport)
             res.json({
-                message: 'Error getting report',
+                message: 'Error getting user report',
                 details: err
             }); else {
             res.json(userreport);
