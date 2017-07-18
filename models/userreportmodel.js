@@ -10,7 +10,8 @@ var UserReportSchema   = new Schema({
     },
     description: String,
     littertype: String,
-    priority: String
+    priority: String,
+    image: String
 },{versionKey : false});
 
 module.exports = mongoose.model('UserReport', UserReportSchema);

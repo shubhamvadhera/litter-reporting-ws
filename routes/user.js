@@ -66,6 +66,7 @@ router.post('/report/', function(req, res) {
     userReport.description = req.body.description;
     userReport.littertype = req.body.littertype;
     userReport.priority = req.body.priority;
+    userReport.image = req.body.image;
 
     userReport.save(function(err, savedReport) {
         if (err || !savedReport)
