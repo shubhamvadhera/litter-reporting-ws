@@ -19,15 +19,16 @@ router.get('/:userid', function(req, res, next) {
 //POST save the user
 router.post('/', function(req, res) {
     var userDetails = new UserDetailsModel();
-    if(!req.body.firstname || !req.body.lastname || !req.body.mobile || !req.body.email)
+    if(!req.body.firstname || !req.body.lastname || !req.body.email || !req.body.deviceid)
         res.json({
             message: 'Error saving user',
-            details: 'firstname, lastname, mobile or email is missing'
+            details: 'firstname, lastname, email or device id is missing'
         }); else {
         userDetails.firstname = req.body.firstname;
         userDetails.lastname = req.body.lastname;
         userDetails.mobile = req.body.mobile;
         userDetails.email = req.body.email;
+        userDetails.deviceid = req.body.deviceid;
         userDetails.save(function(err, savedUser) {
             if (err || !savedUser)
                 res.json({

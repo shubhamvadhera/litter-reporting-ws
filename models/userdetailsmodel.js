@@ -5,7 +5,8 @@ var UserDetailsSchema   = new Schema({
     firstname: String,
     lastname: String,
     mobile: String,
-    email: String
+    email: String,
+    deviceid: String
 },{versionKey : false});
 
 module.exports = mongoose.model('UserDetails', UserDetailsSchema);
