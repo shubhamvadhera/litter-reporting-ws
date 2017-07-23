@@ -11,6 +11,7 @@ var UserReportSchema   = new Schema({
     description: String,
     littertype: String,
     priority: String,
+    status: String,
     image: String
 },{versionKey : false});
 

@@ -57,30 +57,73 @@ router.get('/report/:reportid', function(req, res, next) {
     });
 });
 
-//POST save the report for a user
-router.post('/report/', function(req, res) {
-    var userReport = new UserReportModel();
-    userReport.userid = req.body.userid;
-    userReport.submitted = req.body.submitted;
-    userReport.location.lat = req.body.location.lat;
-    userReport.location.lng = req.body.location.lng;
-    userReport.description = req.body.description;
-    userReport.littertype = req.body.littertype;
-    userReport.priority = req.body.priority;
-    userReport.image = req.body.image;
-
-    userReport.save(function(err, savedReport) {
-        if (err || !savedReport)
+//PUT update the report
+router.put('/report/:reportid', function(req, res) {
+    //var userReport = new UserReportModel();
+    UserReportModel.findById(req.params.reportid, function(err, userreport) {
+        if (err || !userreport)
             res.json({
-                message: 'Error saving report',
+                message: 'Error getting user report',
                 details: err
             }); else {
-            res.json({
-                message: 'User report created !',
-                details: savedReport
+            if(req.body.submitted) userreport.submitted = req.body.submitted
+            if(req.body.location) {
+                if (req.body.location.lat) userreport.location.lat = req.body.location.lat
+                if (req.body.location.lng) userreport.location.lng = req.body.location.lng
+            }
+            if(req.body.description) userreport.description = req.body.description
+            if(req.body.littertype) userreport.littertype = req.body.littertype
+            if(req.body.priority) userreport.priority = req.body.priority
+            if(req.body.status) userreport.status = req.body.status
+            if(req.body.image) userreport.image = req.body.image
+
+            userreport.save(function (err, savedReport) {
+                if (err || !savedReport)
+                    res.json({
+                        message: 'Error updating report',
+                        details: err
+                    }); else {
+                    res.json({
+                        message: 'User report updated !',
+                        details: savedReport
+                    });
+                }
             });
         }
     });
+});
+
+//POST save the report for a user
+router.post('/report/', function(req, res) {
+    var userReport = new UserReportModel();
+    if(!req.body.userid || !req.body.submitted || !req.body.location.lat || !req.body.location.lng || !req.body.status)
+        res.json({
+            message: 'Error saving user',
+            details: 'firstname, lastname, email or device id is missing'
+        }); else {
+        userReport.userid = req.body.userid;
+        userReport.submitted = req.body.submitted;
+        userReport.location.lat = req.body.location.lat;
+        userReport.location.lng = req.body.location.lng;
+        userReport.description = req.body.description;
+        userReport.littertype = req.body.littertype;
+        userReport.priority = req.body.priority;
+        userReport.status = req.body.status
+        userReport.image = req.body.image;
+
+        userReport.save(function (err, savedReport) {
+            if (err || !savedReport)
+                res.json({
+                    message: 'Error saving report',
+                    details: err
+                }); else {
+                res.json({
+                    message: 'User report created !',
+                    details: savedReport
+                });
+            }
+        });
+    }
 });
 
 module.exports = router;
