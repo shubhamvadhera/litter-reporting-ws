@@ -114,6 +114,21 @@ router.get('/report/:reportid', function(req, res, next) {
     });
 });
 
+// DELETE the report for the report id
+router.delete('/report/:reportid', function(req, res, next) {
+    UserReportModel.findByIdAndRemove(req.params.reportid, function(err, userreport) {
+        if (err || !userreport)
+            res.json({
+                message: 'Error getting user report',
+                details: err
+            }); else {
+            res.json({
+                message: 'User report deleted'
+            });
+        }
+    });
+});
+
 //PUT update the report
 router.put('/report/:reportid', function(req, res) {
     UserReportModel.findById(req.params.reportid, function(err, userreport) {
