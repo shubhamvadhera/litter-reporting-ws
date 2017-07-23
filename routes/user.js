@@ -16,6 +16,63 @@ router.get('/:userid', function(req, res, next) {
     });
 });
 
+//DELETE user
+router.delete('/:userid', function(req, res, next) {
+    UserDetailsModel.findByIdAndRemove(req.params.userid, function(err, userdetails) {
+        if (err || !userdetails)
+            res.json({
+                message: 'Error getting user',
+                details: err
+            }); else {
+            res.json({
+                message: 'User delete successfully',
+            });
+        }
+    });
+});
+
+//UPDATE User details
+router.put('/:userid', function(req, res, next) {
+    UserDetailsModel.findById(req.params.userid, function(err, userdetails) {
+        if (err || !userdetails)
+            res.json({
+                message: 'Error getting user',
+                details: err
+            }); else {
+            if(req.body.deviceid) userdetails.deviceid = req.body.deviceid
+            if(req.body.email) userdetails.email = req.body.email
+            if(req.body.firstname) userdetails.firstname = req.body.firstname
+            if(req.body.lastname) userdetails.lastname = req.body.lastname
+
+            userdetails.save(function (err, saveduser) {
+                if (err || !saveduser)
+                    res.json({
+                        message: 'Error updating user details',
+                        details: err
+                    }); else {
+                    res.json({
+                        message: 'User details updated !',
+                        details: saveduser
+                    });
+                }
+            });
+        }
+    });
+});
+
+//GET all reports by a user
+router.get('/:userid/reports', function(req, res, next) {
+    UserReportModel.find({userid: req.params.userid}, function (err, docs) {
+        if (err || !docs)
+            res.json({
+                message: 'Error getting reports for user',
+                details: err
+            }); else {
+            res.json(docs);
+        }
+    });
+});
+
 //POST save the user
 router.post('/', function(req, res) {
     var userDetails = new UserDetailsModel();
@@ -59,7 +116,6 @@ router.get('/report/:reportid', function(req, res, next) {
 
 //PUT update the report
 router.put('/report/:reportid', function(req, res) {
-    //var userReport = new UserReportModel();
     UserReportModel.findById(req.params.reportid, function(err, userreport) {
         if (err || !userreport)
             res.json({
