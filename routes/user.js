@@ -53,6 +53,7 @@ router.put('/:userid', function(req, res, next) {
                     res.json({
                         message: 'User details updated !',
                         details: saveduser
+                        
                     });
                 }
             });
