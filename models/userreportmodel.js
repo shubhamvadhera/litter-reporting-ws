@@ -8,6 +8,7 @@ var UserReportSchema   = new Schema({
         lat: String,
         lng: String
     },
+    address: String,
     description: String,
     littertype: String,
     priority: String,
