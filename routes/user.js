@@ -1,7 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var UserReportModel = require('../models/userreportmodel');
-var UserDetailsModel = require('../models/userdetailsmodel')
+var UserDetailsModel = require('../models/userdetailsmodel');
 
 //GET user details
 router.get('/:userid', function(req, res, next) {
@@ -25,7 +25,7 @@ router.delete('/:userid', function(req, res, next) {
                 details: err
             }); else {
             res.json({
-                message: 'User delete successfully',
+                message: 'User delete successfully'
             });
         }
     });
@@ -39,10 +39,10 @@ router.put('/:userid', function(req, res, next) {
                 message: 'Error getting user',
                 details: err
             }); else {
-            if(req.body.deviceid) userdetails.deviceid = req.body.deviceid
-            if(req.body.email) userdetails.email = req.body.email
-            if(req.body.firstname) userdetails.firstname = req.body.firstname
-            if(req.body.lastname) userdetails.lastname = req.body.lastname
+            if(req.body.deviceid) userdetails.deviceid = req.body.deviceid;
+            if(req.body.email) userdetails.email = req.body.email;
+            if(req.body.firstname) userdetails.firstname = req.body.firstname;
+            if(req.body.lastname) userdetails.lastname = req.body.lastname;
 
             userdetails.save(function (err, saveduser) {
                 if (err || !saveduser)
@@ -90,6 +90,46 @@ router.post('/', function(req, res) {
 });
 
 /********** Report APIs **********/
+
+//GET all reports by status
+router.get('/reports/:status', function(req, res, next) {
+    var status = req.params.status;
+    if(status === 'all') {
+        UserReportModel.find({}, function (err, docs) {
+            if (err || !docs)
+                res.json({
+                    status: 404,
+                    message: 'Error getting reports',
+                    details: err
+                }); else {
+                res.json(docs);
+            }
+        });
+    } else if (status === 'not-closed') {
+        UserReportModel.find(
+            {$or: [{status: "open"}, {status: "in-progress"}]}, function (err, docs) {
+            if (err || !docs)
+                res.json({
+                    status: 404,
+                    message: 'Error getting reports',
+                    details: err
+                }); else {
+                res.json(docs);
+            }
+        });
+    } else {
+        UserReportModel.find({status: status}, function (err, docs) {
+            if (err || !docs)
+                res.json({
+                    status: 404,
+                    message: 'Error getting reports',
+                    details: err
+                }); else {
+                res.json(docs);
+            }
+        });
+    }
+});
 
 //GET all reports by a user
 router.get('/:userid/reports', function(req, res, next) {
