@@ -3,11 +3,14 @@ var router = express.Router();
 var UserReportModel = require('../models/userreportmodel');
 var UserDetailsModel = require('../models/userdetailsmodel');
 
+/********** User APIs **********/
+
 //GET user details
 router.get('/:userid', function(req, res, next) {
     UserDetailsModel.findById(req.params.userid, function(err, userdetails) {
         if (err || !userdetails)
             res.json({
+                status: 404,
                 message: 'Error getting user',
                 details: err
             }); else {
@@ -21,10 +24,12 @@ router.delete('/:userid', function(req, res, next) {
     UserDetailsModel.findByIdAndRemove(req.params.userid, function(err, userdetails) {
         if (err || !userdetails)
             res.json({
-                message: 'Error getting user',
+                status: 500,
+                message: 'Error deleting user',
                 details: err
             }); else {
             res.json({
+                status: 200,
                 message: 'User delete successfully'
             });
         }
@@ -36,21 +41,23 @@ router.put('/:userid', function(req, res, next) {
     UserDetailsModel.findById(req.params.userid, function(err, userdetails) {
         if (err || !userdetails)
             res.json({
+                status: 400,
                 message: 'Error getting user',
                 details: err
             }); else {
             if(req.body.deviceid) userdetails.deviceid = req.body.deviceid;
             if(req.body.email) userdetails.email = req.body.email;
-            if(req.body.firstname) userdetails.firstname = req.body.firstname;
-            if(req.body.lastname) userdetails.lastname = req.body.lastname;
+            if(req.body.name) userdetails.name = req.body.name;
 
             userdetails.save(function (err, saveduser) {
                 if (err || !saveduser)
                     res.json({
+                        status: 500,
                         message: 'Error updating user details',
                         details: err
                     }); else {
                     res.json({
+                        status: 200,
                         message: 'User details updated !',
                         details: saveduser
 
@@ -64,23 +71,24 @@ router.put('/:userid', function(req, res, next) {
 //POST save the user
 router.post('/', function(req, res) {
     var userDetails = new UserDetailsModel();
-    if(!req.body.firstname || !req.body.lastname || !req.body.email || !req.body.deviceid)
+    if(!req.body.name || !req.body.email || !req.body.deviceid)
         res.json({
+            status: 400,
             message: 'Error saving user',
-            details: 'firstname, lastname, email or device id is missing'
+            details: 'One or more mandatory fields are missing'
         }); else {
-        userDetails.firstname = req.body.firstname;
-        userDetails.lastname = req.body.lastname;
-        userDetails.mobile = req.body.mobile;
+        userDetails.name = req.body.name;
         userDetails.email = req.body.email;
         userDetails.deviceid = req.body.deviceid;
         userDetails.save(function(err, savedUser) {
             if (err || !savedUser)
                 res.json({
+                    status: 500,
                     message: 'Error saving user',
                     details: err
                 }); else {
                 res.json({
+                    status: 200,
                     message: 'User details saved !',
                     details: savedUser
                 });
