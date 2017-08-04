@@ -5,7 +5,7 @@ var request = require('request');
 var UserReportModel = require('../models/userreportmodel');
 var UserDetailsModel = require('../models/userdetailsmodel');
 
-var dataModelURL = 'http://35.192.190.62:5000/categorize'
+var dataModelURL = 'http://35.192.190.62:5000/categorize';
 
 /********** User APIs **********/
 
@@ -228,7 +228,7 @@ router.put('/report/:reportid', function (req, res) {
 });
 
 //POST save the report for a user
-router.post('/report/', function (req, res) {
+router.post('/report', function (req, res) {
     var userReport = new UserReportModel();
     if (!req.body.userid || !req.body.submitted || !req.body.location || !req.body.address || !req.body.priority || !req.body.status || !req.body.image)
         res.json({
