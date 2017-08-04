@@ -230,7 +230,7 @@ router.put('/report/:reportid', function (req, res) {
 //POST save the report for a user
 router.post('/report', function (req, res) {
     var userReport = new UserReportModel();
-    if (!req.body.userid || !req.body.submitted || !req.body.location || !req.body.address || !req.body.priority || !req.body.status || !req.body.image)
+    if (!req.body.userid || !req.body.submitted || !req.body.lat || !req.body.lng || !req.body.address || !req.body.priority || !req.body.status || !req.body.image)
         res.json({
             status: 400,
             message: 'Error saving user',
@@ -238,8 +238,8 @@ router.post('/report', function (req, res) {
         }); else {
         userReport.userid = req.body.userid;
         userReport.submitted = req.body.submitted;
-        userReport.location.lat = req.body.location.lat;
-        userReport.location.lng = req.body.location.lng;
+        userReport.location.lat = req.body.lat;
+        userReport.location.lng = req.body.lng;
         userReport.address = req.body.address;
         userReport.description = req.body.description;
         userReport.priority = req.body.priority;
