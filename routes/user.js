@@ -5,7 +5,7 @@ var request = require('request');
 var UserReportModel = require('../models/userreportmodel');
 var UserDetailsModel = require('../models/userdetailsmodel');
 
-var dataModelURL = 'http://35.202.201.178:5000/categorize';
+var dataModelURL = 'http://104.198.188.222:5000/categorize';
 
 /********** User APIs **********/
 
